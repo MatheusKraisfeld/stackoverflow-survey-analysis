@@ -18,6 +18,17 @@ def overview():
     )
 
 
+def tratamento_dos_dados():
+    st.write("---")
+    st.write("## Tratamento dos dados")
+    st.write(
+        "##### Após realizar a leitura dos dados disponibilizados no arquivo _CSV_, foi feito um trabalho de identificação das colunas e linhas que possuíam valores inválidos. \
+        Após essa identificação, os dados foram substituídos de forma que dados não válidos que deveriam ser numéricos, receberam a média dos dados da coluna. \
+        Com isso, o tipo dos dados pode ser convertido de `object` para `float` ou `int`, o que facilita todas as operações realizadas em cima dos dados. \
+        As demais colunas foram convertidas para o tipo `string`, com a mesma finalidade."
+    )
+
+
 def nivel_tecnico():
     st.write("---")
     branch = {
@@ -42,7 +53,7 @@ def nivel_tecnico():
         fig, ax = plt.subplots()
         graph = data.questao1()
         graph = graph.sort_values(ascending=True)
-        ax.pie(graph.values, labels=graph.index)
+        ax.pie(graph.values, labels=graph.index, autopct="%.2f")
         ax.legend(loc="lower right")
         plt.tight_layout()
         st.pyplot(fig)
@@ -95,23 +106,6 @@ def distr_nivel_estudo():
         "##### Como podemos observar no gráfico, o grau de estudo com maior número de entrevistados é Bachelor's Degree, ou seja, Bacharel, com mais de 35 mil das pessoas que responderam ao questionário.\
         Em contrapartida, o grau com menor número de entrevistados é Professional Degree, o que seria o equivalente a um curso técnico no Brasil."
     )
-
-
-# --------------------------------------------------------------------------------------------------------------------------------
-def tempo_por_tipo_de_profissional():
-    st.write("---")
-    st.write("# Distribução de tempo de trabalho para cada tipo de profissional")
-    st.write(
-        "##### De acordo com a coluna `MainBranch`, e aplicando o mesmo tratamento de conversão dos dados da análise de quantidade de profissionais por nível técnico, foi feita a análise do tempo\
-        de trabalho por tipo de profissional."
-    )
-    with st.expander("Distribução de tempo de trabalho para cada tipo de profissional"):
-        fig, ax = plt.subplots()
-        graph = data.questao4()
-        print(graph.index)
-        ax.hist(graph.index, 10, density=True, histtype="bar", stacked=True)
-        plt.tight_layout()
-        st.pyplot(fig)
 
 
 # --------------------------------------------------------------------------------------------------------------------------------
@@ -307,11 +301,11 @@ def faixa_etaria_python():
 
 
 def exibir_estudo():
-    overview()
+    """overview()
+    tratamento_dos_dados()
     nivel_tecnico()
     distr_por_localidade()
     distr_nivel_estudo()
-    tempo_por_tipo_de_profissional()
     trabalham_profissionalmente()
     media_salarial()
     salario_paises_mais_responderam()
@@ -321,6 +315,27 @@ def exibir_estudo():
     python_sistemas_operacionais()
     faixa_etaria()
     faixa_etaria_python()
+    """
+    with st.sidebar:
+        st.title("Análises")
+        options = {
+            "Overview": overview,
+            "Tratamento dos dados": tratamento_dos_dados,
+            "Nível técnico": nivel_tecnico,
+            "Distribuição das pessoas que responderam por localidade": distr_por_localidade,
+            "Distribuição do nível de estudo dos participantes": distr_nivel_estudo,
+            "Das pessoas que trabalham profissionalmente...": trabalham_profissionalmente,
+            "Média salarial": media_salarial,
+            "Salário nos 5 países que mais responderam": salario_paises_mais_responderam,
+            "Porcentagem das pessoas que trabalham com Python": porcentagem_python,
+            "Sobre python...": sobre_python,
+            "Sistemas operacionais utilizados": sistemas_operacionais,
+            "Distribuição de sistema operacional utilizado por desenvolvedores Python": python_sistemas_operacionais,
+            "Faixa etária com mais pessoas que responderam": faixa_etaria,
+            "Faixa Etaria Python": faixa_etaria,
+        }
+        choice = st.radio("Selecione a análise", options)
+    options[choice]()
 
 
 exibir_estudo()
